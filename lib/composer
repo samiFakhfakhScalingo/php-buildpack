@@ -184,12 +184,17 @@ function install_composer_deps() {
         local dev=${COMPOSER_DEV:=false}
         [ "x$dev" = "xtrue" ] && devopt="--dev"
 
+        local ignore_sodium=""
+        if [ "x${IGNORE_SODIUM}" = "xtrue" ]; then
+            ignore_sodium="--ignore-platform-req=ext-sodium"
+        fi
+
         cd "$target"
         php "vendor/composer/bin/composer.phar" install \
             --prefer-dist \
             --optimize-autoloader \
             --no-interaction \
-            $devopt
+            $devopt $ignore_sodium
         cd "$cwd"
     } | indent
 }
